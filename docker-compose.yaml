@@ -1,0 +1,15 @@
+services:
+  postgres-compose:
+    image: postgres
+    restart: always
+    environment:
+      DB_NAME: catalog, catalog-dev
+      DB_USER: postgres
+      DB_PASS: adm@123
+      PG_PASSWORD: adm@123
+    ports:
+      - "5432:5432"
+    volumes:
+      - curso-hib-pg-data:/var/lib/postgresql/data
+    networks:
+      - postgres-compose-network
