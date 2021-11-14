@@ -1,0 +1,42 @@
+version: "3.0"
+services:
+  auth-user-db:
+    container_name: auth_user_db
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: authuser
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth-user-volume:/var/lib/postgresql
+  notification-db:
+    container_name: notification_db
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: notification
+    ports:
+      - "5433:5432"
+    volumes:
+      - notification-volume:/var/lib/postgresql
+  course-db:
+    container_name: course_db
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: course
+    ports:
+      - "5434:5432"
+    volumes:
+      - course-volume:/var/lib/postgresql
+volumes:
+  auth-user-volume:
+  notification-volume:
+  course-volume:
