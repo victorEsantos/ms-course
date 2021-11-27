@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @Table(name = "TB_COURSES")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CourseModel implements Serializable {
+public class Course implements Serializable {
     public static final long serialVersionUID = -1378148836386067325L;
 
     @Id
@@ -57,9 +57,13 @@ public class CourseModel implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY )
     @Fetch(FetchMode.SUBSELECT)
-    private Set<ModuleModel> modules;
+    private Set<Module> modules;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<CourseUser> courseUsers;
+
+    public CourseUser convertToCourseUser(UUID userId){
+        return new CourseUser(null, this, userId);
+    }
 }

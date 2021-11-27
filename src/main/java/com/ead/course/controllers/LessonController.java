@@ -1,8 +1,8 @@
 package com.ead.course.controllers;
 
 import com.ead.course.dtos.LessonDto;
-import com.ead.course.models.LessonModel;
-import com.ead.course.models.ModuleModel;
+import com.ead.course.models.Lesson;
+import com.ead.course.models.Module;
 import com.ead.course.services.LessonService;
 import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
@@ -35,11 +35,11 @@ public class LessonController {
     @PostMapping("/modules/{moduleId}/lessons")
     public ResponseEntity<Object> saveLesson(@PathVariable(value = "moduleId") UUID moduleId,
                                              @RequestBody @Valid LessonDto lessonDto) {
-        Optional<ModuleModel> moduleModelOptional = moduleService.findById(moduleId);
+        Optional<Module> moduleModelOptional = moduleService.findById(moduleId);
         if (!moduleModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module Not Found.");
         }
-        var lessonModel = new LessonModel();
+        var lessonModel = new Lesson();
         BeanUtils.copyProperties(lessonDto, lessonModel);
         lessonModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         lessonModel.setModule(moduleModelOptional.get());
@@ -50,7 +50,7 @@ public class LessonController {
     @DeleteMapping("/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable(value = "moduleId") UUID moduleId,
                                                @PathVariable(value = "lessonId") UUID lessonId) {
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
+        Optional<Lesson> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
         if (!lessonModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found for this module.");
         }
@@ -62,7 +62,7 @@ public class LessonController {
     public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId") UUID moduleId,
                                                @PathVariable(value = "lessonId") UUID lessonId,
                                                @RequestBody @Valid LessonDto lessonDto) {
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
+        Optional<Lesson> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
         if (!lessonModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found for this module.");
         }
@@ -75,16 +75,16 @@ public class LessonController {
     }
 
     @GetMapping("/modules/{moduleId}/lessons")
-    public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
-                                                           SpecificationTemplate.LessonSpec spec,
-                                                           @PageableDefault(page = 0, size = 10, sort = "lessonId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Lesson>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
+                                                      SpecificationTemplate.LessonSpec spec,
+                                                      @PageableDefault(page = 0, size = 10, sort = "lessonId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllByModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec), pageable));
     }
 
     @GetMapping("/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> getOneLesson(@PathVariable(value = "moduleId") UUID moduleId,
                                                @PathVariable(value = "lessonId") UUID lessonId) {
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
+        Optional<Lesson> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
         if (!lessonModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found for this module.");
         }

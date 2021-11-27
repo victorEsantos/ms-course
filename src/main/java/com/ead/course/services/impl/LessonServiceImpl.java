@@ -1,6 +1,6 @@
 package com.ead.course.services.impl;
 
-import com.ead.course.models.LessonModel;
+import com.ead.course.models.Lesson;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +20,27 @@ public class LessonServiceImpl implements LessonService {
     private LessonRepository repository;
 
     @Override
-    public void delete(LessonModel lessonModel) {
-        repository.delete(lessonModel);
+    public void delete(Lesson lesson) {
+        repository.delete(lesson);
     }
 
     @Override
-    public void save(LessonModel lessonModel) {
-        repository.save(lessonModel);
+    public void save(Lesson lesson) {
+        repository.save(lesson);
     }
 
     @Override
-    public Optional<LessonModel> findLessonIntoModule(UUID moduleId, UUID lessonId) {
+    public Optional<Lesson> findLessonIntoModule(UUID moduleId, UUID lessonId) {
         return repository.findLessonIntoModule(moduleId, lessonId);
     }
 
     @Override
-    public List<LessonModel> findAllByModule(UUID moduleId) {
+    public List<Lesson> findAllByModule(UUID moduleId) {
         return repository.findAllLessonsIntoModule(moduleId);
     }
 
     @Override
-    public Page<LessonModel> findAllByModule(Specification<LessonModel> spec, Pageable pageable) {
+    public Page<Lesson> findAllByModule(Specification<Lesson> spec, Pageable pageable) {
         return repository.findAll(spec, pageable);
     }
 }

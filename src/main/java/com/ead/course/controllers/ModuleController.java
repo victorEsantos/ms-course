@@ -2,8 +2,8 @@ package com.ead.course.controllers;
 
 
 import com.ead.course.dtos.ModuleDto;
-import com.ead.course.models.CourseModel;
-import com.ead.course.models.ModuleModel;
+import com.ead.course.models.Course;
+import com.ead.course.models.Module;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
@@ -36,11 +36,11 @@ public class ModuleController {
     @PostMapping("/courses/{courseId}/modules")
     public ResponseEntity<Object> saveModule(@PathVariable(value="courseId") UUID courseId,
                                                 @RequestBody @Valid ModuleDto moduleDto){
-        Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
+        Optional<Course> courseModelOptional = courseService.findById(courseId);
         if(!courseModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course Not Found.");
         }
-        var moduleModel = new ModuleModel();
+        var moduleModel = new Module();
         BeanUtils.copyProperties(moduleDto, moduleModel);
         moduleModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         moduleModel.setCourse(courseModelOptional.get());
@@ -51,7 +51,7 @@ public class ModuleController {
     @DeleteMapping("/courses/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> deleteModule(@PathVariable(value="courseId") UUID courseId,
                                                @PathVariable(value="moduleId") UUID moduleId){
-        Optional<ModuleModel> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
+        Optional<Module> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
         if(!moduleModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found for this course.");
         }
@@ -63,7 +63,7 @@ public class ModuleController {
     public ResponseEntity<Object> updateModule(@PathVariable(value="courseId") UUID courseId,
                                                @PathVariable(value="moduleId") UUID moduleId,
                                                @RequestBody @Valid ModuleDto moduleDto){
-        Optional<ModuleModel> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
+        Optional<Module> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
         if(!moduleModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found for this course.");
         }
@@ -75,16 +75,16 @@ public class ModuleController {
     }
 
     @GetMapping("/courses/{courseId}/modules")
-    public ResponseEntity<Page<ModuleModel>> getAllModules(@PathVariable(value="courseId") UUID courseId,
-                                                           SpecificationTemplate.ModuleSpec spec,
-                                                           @PageableDefault(page = 0, size = 10, sort = "moduleId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Module>> getAllModules(@PathVariable(value="courseId") UUID courseId,
+                                                      SpecificationTemplate.ModuleSpec spec,
+                                                      @PageableDefault(page = 0, size = 10, sort = "moduleId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.findAllByCourse(SpecificationTemplate.moduleCourseId(courseId).and(spec), pageable));
     }
 
     @GetMapping("/courses/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> getOneModule(@PathVariable(value="courseId") UUID courseId,
                                                @PathVariable(value="moduleId") UUID moduleId){
-        Optional<ModuleModel> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
+        Optional<Module> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
         if(!moduleModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found for this course.");
         }

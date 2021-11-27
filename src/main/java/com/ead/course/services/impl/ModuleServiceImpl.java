@@ -1,7 +1,7 @@
 package com.ead.course.services.impl;
 
-import com.ead.course.models.LessonModel;
-import com.ead.course.models.ModuleModel;
+import com.ead.course.models.Lesson;
+import com.ead.course.models.Module;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import com.ead.course.services.ModuleService;
@@ -27,37 +27,37 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Transactional
     @Override
-    public void delete(ModuleModel moduleModel) {
-        List<LessonModel> lessonModelList = lessonRepository.findAllLessonsIntoModule(moduleModel.getModuleId());
-        if (!lessonModelList.isEmpty()) {
-            lessonRepository.deleteAll(lessonModelList);
+    public void delete(Module module) {
+        List<Lesson> lessonList = lessonRepository.findAllLessonsIntoModule(module.getModuleId());
+        if (!lessonList.isEmpty()) {
+            lessonRepository.deleteAll(lessonList);
         }
 
-        repository.delete(moduleModel);
+        repository.delete(module);
     }
 
     @Override
-    public Optional<ModuleModel> findById(UUID moduleId) {
+    public Optional<Module> findById(UUID moduleId) {
         return repository.findById(moduleId);
     }
 
     @Override
-    public void save(ModuleModel moduleModel) {
-        repository.save(moduleModel);
+    public void save(Module module) {
+        repository.save(module);
     }
 
     @Override
-    public Optional<ModuleModel> findModuleIntoCourse(UUID courseId, UUID moduleId) {
+    public Optional<Module> findModuleIntoCourse(UUID courseId, UUID moduleId) {
         return repository.findModuleIntoCourse(courseId, moduleId);
     }
 
     @Override
-    public List<ModuleModel> findAllByCourse(UUID courseId) {
+    public List<Module> findAllByCourse(UUID courseId) {
         return repository.findAllModulesIntoCourse(courseId);
     }
 
     @Override
-    public Page<ModuleModel> findAllByCourse(Specification<ModuleModel> spec, Pageable pageable) {
+    public Page<Module> findAllByCourse(Specification<Module> spec, Pageable pageable) {
         return repository.findAll(spec, pageable);
     }
 }
