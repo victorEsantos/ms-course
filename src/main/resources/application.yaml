@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/eadcourse
-    username: ****
-    password: ****
+    url: jdbc:postgresql://localhost:5434/course
+    username: "postgres"
+    password: "root"
   jpa:
     hibernate:
       #      criar tabelas automatico
