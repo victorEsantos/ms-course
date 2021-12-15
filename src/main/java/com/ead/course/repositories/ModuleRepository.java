@@ -17,8 +17,8 @@ public interface ModuleRepository extends JpaRepository<Module, UUID>, JpaSpecif
     @EntityGraph(attributePaths = {"course"})
     Module findByTitle(String title);
 
-    //@Query(value = "select * from tb_modules where course_course_id = :courseId", nativeQuery = true)
-    @Query(value = "select module from Module module where module.course.courseId = : courseId", nativeQuery = false)
+    @Query(value = "select * from tb_modules where course_course_id = :courseId", nativeQuery = true)
+//    @Query(value = "select module from Module module where module.course.courseId = : courseId", nativeQuery = false)
     List<Module> findAllModulesIntoCourse(@Param("courseId") UUID courseId);
 
     @Query(value = "select * from tb_modules where course_course_id = :courseId and module_id = :moduleId", nativeQuery = true)
