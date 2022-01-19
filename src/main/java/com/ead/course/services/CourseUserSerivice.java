@@ -8,7 +8,11 @@ import java.util.UUID;
 public interface CourseUserSerivice {
     boolean existsByCourseAndUserId(Course course, UUID userId);
 
+    boolean existsByUserId(UUID userId);
+
     CourseUser save(CourseUser courseUser);
 
     CourseUser saveAndSendSubscriptionUserInCourse(CourseUser courseUser);
+
+    void deleteCourseUserByUser(UUID userId);
 }
